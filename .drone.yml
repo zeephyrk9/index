@@ -24,3 +24,13 @@ steps:
       password:
         from_secret: REGISTRY_PASSWORD
       repo: git.odzi.dog/zeephyr/worker
+  - name: Build and push GATEWAY image
+    image: plugins/docker
+    settings:
+      registry: git.odzi.dog
+      dockerfile: packages/gateway/Dockerfile
+      username:
+        from_secret: REGISTRY_USERNAME
+      password:
+        from_secret: REGISTRY_PASSWORD
+      repo: git.odzi.dog/zeephyr/gateway
