@@ -1,19 +1,26 @@
+{{ $fullname := printf "%s-%s" .Chart.Name "worker" | trunc 63 | trimSuffix "-" }}
+
 apiVersion: apps/v1
-kind: StatefulSet
+kind: ReplicaSet
 metadata:
-  name: workers
+  name: {{ $fullname }}
+  labels:
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}"
 spec:
   selector:
     matchLabels:
-      app: workers # has to match .spec.template.metadata.labels
-  replicas: {{ $.Values.worker.replicas }} # by default is 1
-  minReadySeconds: 10 # by default is 0
+      app: {{ $fullname }}
+  replicas: {{ default 1 $.Values.worker.replicas | int }}
+  minReadySeconds: 10
   template:
     metadata:
       labels:
-        app: workers # has to match .spec.selector.matchLabels
+        app: {{ $fullname }}
     spec:
       terminationGracePeriodSeconds: 10
       containers:
-      - name: workers
-        image: {{ $.Values.worker.image }}:{{ $.Values.worker.tag }}
+      - name: worker
+        image: {{ $.Values.worker.image }}:{{ $.Values.tag }}
+        env:
+          - name: TEMPORAL_URL
+            value: {{ $.Values.temporal_url }}

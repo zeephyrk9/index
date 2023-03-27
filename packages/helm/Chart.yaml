@@ -1,6 +1,6 @@
 apiVersion: v2
-name: zeephyr-index-workflows
-description: Zeephyr Index | Workflows Chart
+name: zeephyr-index
+description: Zeephyr Index | Chart
 
 type: application
 version: 0.1.0

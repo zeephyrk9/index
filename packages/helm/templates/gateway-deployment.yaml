@@ -1,0 +1,57 @@
+{{ $fullname := printf "%s-%s" .Chart.Name "gateway" | trunc 63 | trimSuffix "-" }}
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ $fullname }}
+  labels:
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}"
+spec:
+  selector:
+    matchLabels:
+      app: {{ $fullname }}
+  replicas: {{ default 1 $.Values.gateway.replicas | int }}
+  template:
+    metadata:
+      labels:
+        app: {{ $fullname }}
+    spec:
+      containers:
+      - name: gateway
+        image: {{ $.Values.gateway.image }}:{{ $.Values.tag }}
+        ports:
+          - name: "entrypoint"
+            containerPort: 3000
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: index-gateway
+  labels:
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}"
+spec:
+  ports:
+  - port: 3000
+    targetPort: 3000
+    name: "entrypoint"
+  selector:
+    app: {{ $fullname }}
+
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: index-gateway
+spec:
+  entryPoints:
+  - web
+  - websecure
+  routes:
+    - match: Host(`test.zeephyr.k8s.odzi.dog`)
+      kind: Rule
+      services:
+        - name: index-gateway
+          port: "entrypoint"
+  tls:
+    certResolver: "cloudflare"

@@ -1,5 +1,15 @@
-worker:
-  image: registry.odzi.dog/zeephyr/worker
-  tag: latest
+tag: latest
+temporal_url: temporal.temporal-tests.svc.cluster.local:7233
 
+# Worker deployment
+worker:
+  image: git.odzi.dog/zeephyr/worker
   replicas: 2
+
+# Gateway deployment
+gateway:
+  image: git.odzi.dog/zeephyr/gateway
+  replicas: 1
+
+  service:
+    type: ClusterIP
