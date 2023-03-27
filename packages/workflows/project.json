@@ -7,7 +7,7 @@
     "build": {
       "executor": "@nrwl/esbuild:esbuild",
       "outputs": ["{options.outputPath}"],
-      "defaultConfiguration": "production",
+      "defaultConfiguration": "worker",
       "options": {
         "platform": "node",
         "outputPath": "dist/packages/workflows",
