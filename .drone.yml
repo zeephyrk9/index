@@ -1,0 +1,37 @@
+kind: pipeline
+type: docker
+name: build_workflow_images
+
+platform:
+  os: linux
+  arch: arm64
+
+steps:
+  - name: Get git commit tag
+    image: alpine
+    commands:
+      - apk add git
+      - git rev-parse --short HEAD > .tags
+      - cat .tags
+  - name: Build and push WORKER image
+    image: plugins/docker
+    settings:
+      registry: git.odzi.dog
+      dockerfile: packages/workflows/Dockerfile
+      build_args: "build_target=worker"
+      username:
+        from_secret: REGISTRY_USERNAME
+      password:
+        from_secret: REGISTRY_PASSWORD
+      repo: git.odzi.dog/zeephyr/worker
+  - name: Build and push CLIENT image
+    image: plugins/docker
+    settings:
+      registry: git.odzi.dog
+      dockerfile: packages/workflows/Dockerfile
+      build_args: "build_target=client"
+      username:
+        from_secret: REGISTRY_USERNAME
+      password:
+        from_secret: REGISTRY_PASSWORD
+      repo: git.odzi.dog/zeephyr/client
