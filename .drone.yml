@@ -1,6 +1,6 @@
 kind: pipeline
 type: docker
-name: build_workflow_images
+name: build_images
 
 platform:
   os: linux
@@ -13,6 +13,8 @@ steps:
       - apk add git
       - git rev-parse --short HEAD > .tags
       - cat .tags
+  
+  # Worker image
   - name: Build and push WORKER image
     image: plugins/docker
     settings:
@@ -24,6 +26,8 @@ steps:
       password:
         from_secret: REGISTRY_PASSWORD
       repo: git.odzi.dog/zeephyr/worker
+
+  # Gateway image
   - name: Build and push GATEWAY image
     image: plugins/docker
     settings:
@@ -34,3 +38,39 @@ steps:
       password:
         from_secret: REGISTRY_PASSWORD
       repo: git.odzi.dog/zeephyr/gateway
+
+---
+kind: pipeline
+type: docker
+name: deploy_production
+
+platform:
+  os: linux
+  arch: arm64
+
+steps:
+  - name: Get git commit tag
+    image: alpine
+    commands:
+      - apk add git
+      - git config --global --add safe.directory '*'
+      - git rev-parse --short HEAD > .tag
+      - cat .tag
+  - name: Upgrade our helm chart with new tag
+    image: alpine/k8s:1.26.1
+    environment:
+      KUBECONFIG_DATA:
+        from_secret: KUBECONFIG_DATA
+    commands:
+      - mkdir ~/.kube
+      - echo $${KUBECONFIG_DATA} | base64 -d > ~/.kube/config
+      - export KUBECONFIG=~/.kube/config
+      - kubectl version
+      
+      # Deploying our helm release with new tag value
+      - export TAG=$(cat .tag)
+      - "echo Installing with tag: $TAG"
+      - helm upgrade zeephyr-index --namespace zeephyr --install ./packages/helm --set-string tag=$TAG
+
+depends_on:
+  - build_images
