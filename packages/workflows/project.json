@@ -7,12 +7,12 @@
     "build": {
       "executor": "@nrwl/esbuild:esbuild",
       "outputs": ["{options.outputPath}"],
-      "defaultConfiguration": "worker",
       "options": {
         "platform": "node",
         "outputPath": "dist/packages/workflows",
         "format": ["cjs"],
         "bundle": false,
+        "main": "packages/workflows/src/worker.ts",
         "tsConfig": "packages/workflows/tsconfig.app.json",
         "assets": ["packages/workflows/src/assets"],
         "esbuildOptions": {
@@ -21,29 +21,12 @@
             ".js": ".js"
           }
         }
-      },
-      "configurations": {
-        "worker": {
-          "main": "packages/workflows/src/worker.ts"
-        },
-        "client": {
-          "main": "packages/workflows/src/client.ts"
-        }
       }
     },
     "serve": {
       "executor": "@nrwl/js:node",
-      "defaultConfiguration": "client",
       "options": {
         "buildTarget": "workflows:build"
-      },
-      "configurations": {
-        "worker": {
-          "buildTarget": "workflows:build:worker"
-        },
-        "client": {
-          "buildTarget": "workflows:build:client"
-        }
       }
     },
     "lint": {

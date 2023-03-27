@@ -12,7 +12,7 @@
         "platform": "node",
         "outputPath": "dist/packages/gateway",
         "format": ["cjs"],
-        "bundle": false,
+        "bundle": true,
         "main": "packages/gateway/src/main.ts",
         "tsConfig": "packages/gateway/tsconfig.app.json",
         "assets": ["packages/gateway/src/assets"],
@@ -20,7 +20,19 @@
           "sourcemap": true,
           "outExtension": {
             ".js": ".js"
-          }
+          },
+          "external": [
+            "@temporalio/activity",
+            "@temporalio/client",
+            "@temporalio/worker",
+            "@temporalio/workflow",
+            "@trpc/server",
+            "nanoid",
+            "express",
+            "zod",
+            "trpc-openapi",
+            "swagger-ui-express"
+          ]
         }
       },
       "configurations": {

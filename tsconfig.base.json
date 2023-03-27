@@ -14,7 +14,10 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "paths": {}
+    "paths": {
+      "@workflows": ["packages/workflows/src/index.ts"],
+      "@workflows/*": ["packages/workflows/src/workflows"],
+    }
   },
   "exclude": ["node_modules", "tmp"]
 }
