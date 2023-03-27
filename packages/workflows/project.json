@@ -1,0 +1,58 @@
+{
+  "name": "workflows",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/workflows/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/esbuild:esbuild",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "platform": "node",
+        "outputPath": "dist/packages/workflows",
+        "format": ["cjs"],
+        "bundle": false,
+        "tsConfig": "packages/workflows/tsconfig.app.json",
+        "assets": ["packages/workflows/src/assets"],
+        "esbuildOptions": {
+          "sourcemap": true,
+          "outExtension": {
+            ".js": ".js"
+          }
+        }
+      },
+      "configurations": {
+        "worker": {
+          "main": "packages/workflows/src/worker.ts"
+        },
+        "client": {
+          "main": "packages/workflows/src/client.ts"
+        }
+      }
+    },
+    "serve": {
+      "executor": "@nrwl/js:node",
+      "defaultConfiguration": "client",
+      "options": {
+        "buildTarget": "workflows:build"
+      },
+      "configurations": {
+        "worker": {
+          "buildTarget": "workflows:build:worker"
+        },
+        "client": {
+          "buildTarget": "workflows:build:client"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["packages/workflows/**/*.ts"]
+      }
+    }
+  },
+  "tags": []
+}
