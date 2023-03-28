@@ -13,3 +13,20 @@ gateway:
 
   service:
     type: ClusterIP
+
+# Neo4j deployment
+neo4j:
+  neo4j:
+    name: database
+    resources:
+      cpu: 500m
+      memory: 2Gi
+
+    password: "12344321"
+
+  volumes:
+    data:
+      mode: defaultStorageClass
+      defaultStorageClass:
+        requests:
+          storage: 2Gi
