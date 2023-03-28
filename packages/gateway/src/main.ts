@@ -12,6 +12,7 @@ const pathPrefix = process.env.PATH_PREFIX ?? "";
 
 const app = express();
 
+app.use(`${pathPrefix}/docs`, swagger.serve, swagger.setup(openApiDocument));
 app.use(
   `${pathPrefix}/trpc`,
   trpc.createExpressMiddleware({
@@ -19,8 +20,7 @@ app.use(
     createContext,
   })
 );
-app.use(`${pathPrefix}/api`, createOpenApiExpressMiddleware({ router: GlobalAppRouter, createContext }));
-app.use(`${pathPrefix}/docs`, swagger.serve, swagger.setup(openApiDocument));
+app.use(`${pathPrefix}`, createOpenApiExpressMiddleware({ router: GlobalAppRouter, createContext }));
 
 app.listen(port, host, () => {
   console.log(`[ ready ] http://${host}:${port}`);
