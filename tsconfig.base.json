@@ -16,7 +16,7 @@
     "baseUrl": ".",
     "paths": {
       "@workflows": ["packages/workflows/src/index.ts"],
-      "@workflows/*": ["packages/workflows/src/workflows"],
+      "@workflows/*": ["packages/workflows/src/*"],
     }
   },
   "exclude": ["node_modules", "tmp"]
