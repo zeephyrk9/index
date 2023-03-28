@@ -14,6 +14,8 @@ gateway:
   service:
     type: ClusterIP
 
+taskQueueName: zeephyr-index
+
 # Neo4j deployment
 neo4j:
   neo4j:

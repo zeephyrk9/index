@@ -26,6 +26,8 @@ spec:
             value: {{ $.Values.temporal_url }}
           - name: PATH_PREFIX
             value: "/zeephyr/index/v1"
+          - name: TASK_QUEUE
+            value: {{ $.Values.taskQueueName }}
         ports:
           - containerPort: 3000
 

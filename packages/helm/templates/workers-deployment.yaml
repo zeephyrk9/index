@@ -24,3 +24,5 @@ spec:
         env:
           - name: TEMPORAL_URL
             value: {{ $.Values.temporal_url }}
+          - name: TASK_QUEUE
+            value: {{ $.Values.taskQueueName }}
