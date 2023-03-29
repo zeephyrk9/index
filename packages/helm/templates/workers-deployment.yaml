@@ -26,3 +26,5 @@ spec:
             value: {{ $.Values.temporal_url }}
           - name: TASK_QUEUE
             value: {{ $.Values.taskQueueName }}
+          - name: NAMESPACE
+            value: {{ $.Values.workflows.namespace }}

@@ -1,0 +1,22 @@
+{{ $fullname := printf "%s-%s" .Chart.Name "schedule-tools" | trunc 63 | trimSuffix "-" }}
+
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ $fullname }}
+spec:
+  template:
+    spec:
+      containers:
+      - name: schedule-tools
+        image: {{ $.Values.schedule-tools.image }}
+        env:
+          - name: TEMPORAL_URL
+            value: {{ $.Values.temporal_url }}
+          - name: TASK_QUEUE
+            value: {{ $.Values.taskQueueName }}
+          - name: NAMESPACE
+            value: {{ $.Values.workflows.namespace }}
+        command: ["schedule.js"]
+      restartPolicy: Never
+  backoffLimit: 4

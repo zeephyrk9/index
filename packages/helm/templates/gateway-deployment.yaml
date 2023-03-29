@@ -28,6 +28,8 @@ spec:
             value: "/zeephyr/index/v1"
           - name: TASK_QUEUE
             value: {{ $.Values.taskQueueName }}
+          - name: NAMESPACE
+            value: {{ $.Values.workflows.namespace }}
         ports:
           - containerPort: 3000
 

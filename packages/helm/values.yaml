@@ -14,7 +14,14 @@ gateway:
   service:
     type: ClusterIP
 
+schedule-tools:
+  image: 
+
 taskQueueName: zeephyr-index
+workflows:
+  # todo
+  # change to zeephyr
+  namespace: default
 
 # Neo4j deployment
 neo4j:
