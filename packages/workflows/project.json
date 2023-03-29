@@ -28,8 +28,7 @@
           "main": "packages/workflows/src/worker.ts"
         },
         "schedules": {
-          "main": "packages/workflows/src/schedule.ts",
-          "outputPath": "dist/packages/schedules"
+          "main": "packages/workflows/src/schedule.ts"
         }
       }
     },
