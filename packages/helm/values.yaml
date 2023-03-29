@@ -14,8 +14,8 @@ gateway:
   service:
     type: ClusterIP
 
-schedule-tools:
-  image: 
+schedules:
+  image: git.odzi.dog/zeephyr/schedule-tools
 
 taskQueueName: zeephyr-index
 workflows:
