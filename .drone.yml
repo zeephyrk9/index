@@ -39,6 +39,19 @@ steps:
         from_secret: REGISTRY_PASSWORD
       repo: git.odzi.dog/zeephyr/gateway
 
+  # Schedules Tools image
+  - name: Build and push SCHEDULE_TOOLS image
+    image: plugins/docker
+    settings:
+      registry: git.odzi.dog
+      dockerfile: packages/gateway/Dockerfile
+      build_args: "build_target=schedules"
+      username:
+        from_secret: REGISTRY_USERNAME
+      password:
+        from_secret: REGISTRY_PASSWORD
+      repo: git.odzi.dog/zeephyr/schedule-tools
+
 ---
 kind: pipeline
 type: docker
