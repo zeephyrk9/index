@@ -9,7 +9,7 @@ spec:
     spec:
       containers:
       - name: schedule-tools
-        image: {{ $.Values.schedule-tools.image }}
+        image: {{ $.Values.schedule-tools.image }}:{{ $.Values.tag }}
         env:
           - name: TEMPORAL_URL
             value: {{ $.Values.temporal_url }}
