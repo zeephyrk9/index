@@ -7,6 +7,7 @@
     "build": {
       "executor": "@nrwl/esbuild:esbuild",
       "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "worker",
       "options": {
         "platform": "node",
         "outputPath": "dist/packages/workflows",
@@ -21,12 +22,29 @@
             ".js": ".js"
           }
         }
+      },
+      "configurations": {
+        "worker": {
+          "main": "packages/workflows/src/worker.ts"
+        },
+        "schedules": {
+          "main": "packages/workflows/src/schedule.ts"
+        }
       }
     },
     "serve": {
       "executor": "@nrwl/js:node",
+      "defaultConfiguration": "worker",
       "options": {
         "buildTarget": "workflows:build"
+      },
+      "configurations": {
+        "worker": {
+          "buildTarget": "workflows:build"
+        },
+        "schedules": {
+          "buildTarget": "workflows:build:schedules"
+        }
       }
     },
     "lint": {
