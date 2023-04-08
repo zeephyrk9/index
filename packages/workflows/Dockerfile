@@ -17,10 +17,11 @@ RUN npx nx run workflows:build:$build_target
 
 # Runtime
 FROM node:18 as runtime
+ARG build_target
 WORKDIR /src
 
 COPY --from=deps /src/node_modules ./node_modules
-COPY --from=builder /src/dist/packages/workflows .
+COPY --from=builder /src/dist/packages/$build_target .
 
 ENTRYPOINT [ "node" ]
 CMD [ "worker.js" ]

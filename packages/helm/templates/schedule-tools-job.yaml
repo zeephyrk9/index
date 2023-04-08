@@ -17,6 +17,7 @@ spec:
             value: {{ $.Values.taskQueueName }}
           - name: NAMESPACE
             value: {{ $.Values.workflows.namespace }}
-        command: ["schedule.js"]
+        args:
+        - "schedule.js"
       restartPolicy: Never
   backoffLimit: 4
