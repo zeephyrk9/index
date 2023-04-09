@@ -10,7 +10,7 @@
       "defaultConfiguration": "worker",
       "options": {
         "platform": "node",
-        "outputPath": "dist/packages/workflows",
+        "outputPath": "dist/packages/worker",
         "format": ["cjs"],
         "bundle": false,
         "main": "packages/workflows/src/worker.ts",
