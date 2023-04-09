@@ -45,7 +45,7 @@ steps:
     settings:
       registry: git.odzi.dog
       dockerfile: packages/gateway/Dockerfile
-      build_args: "build_target=schedules"
+      build_args: "build_target=schedule"
       username:
         from_secret: REGISTRY_USERNAME
       password:
