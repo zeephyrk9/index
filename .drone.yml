@@ -83,7 +83,7 @@ steps:
       # Deploying our helm release with new tag value
       - export TAG=$(cat .tag)
       - "echo Installing with tag: $TAG"
-      - helm upgrade zeephyr-index --namespace zeephyr --install ./packages/helm --set-string tag=$TAG
+      - helm upgrade zeephyr-index --namespace zeephyr --install ./packages/helm --set-string tag=$TAG --wait
 
 depends_on:
   - build_images
