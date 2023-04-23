@@ -14,6 +14,7 @@ COPY --from=deps /src/node_modules ./node_modules
 
 COPY . .
 RUN npx nx run workflows:build:$build_target
+RUN ls -lhR dist/packages
 
 # Runtime
 FROM node:18 as runtime
