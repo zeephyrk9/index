@@ -2,7 +2,7 @@ import { z } from "zod";
 import { PostEntry } from "./types";
 import { ProxiedActivities } from "../../../activities/proxiedActivities";
 import getUnifiedPostId from "../../../helpers/getUnifiedPostId";
-import { ContentType, ImageContentEntry } from "../../../database";
+import { ContentType } from "../../../database";
 import AbstractWorkflowMeta from "../../../helpers/AbstractWorkflowMeta";
 import { nanoid } from "nanoid";
 
@@ -30,7 +30,7 @@ export async function e621ScrapeProcessor(payload: z.infer<typeof Input>): Promi
         method: "GET"
     });
 
-    const postsAdded: Array<ImageContentEntry> = [];
+    const postsAddedIds: Array<string> = [];
 
     // Checking if we need to update/create these posts
     for (const post of posts) {
@@ -40,24 +40,33 @@ export async function e621ScrapeProcessor(payload: z.infer<typeof Input>): Promi
             // @todo
             // update this post information? or relationships
         } else {
+            // @todo
+            // adding tags
+            // adding sources
+            // parsing relationships
+            // ...and other information
 
+            // Parsing this post's artists
+            
 
             // Creating this post
-            postsAdded.push(await createPost({
+            await createPost({
                 type: ContentType.IMAGE,
                 id: getUnifiedPostId("E621", post.id),
                 imageUrl: post.file.url,
 
                 created_at: Date.now(), // @todo: parse post's created_at field and pass it here
                 scraped_at: Date.now(),
-            }));
+            });
+            
+            postsAddedIds.push(getUnifiedPostId("E621", post.id));
         };
     };
 
     return {
         success: true,
         meta: {
-            postsAdded: postsAdded.map((post) => post.id),
+            postsAdded: postsAddedIds,
         }
     };
 };
