@@ -16,8 +16,6 @@ const Output = z.string();
 
 /** A workflow that simply calls an activity */
 export async function searchByTags(payload: z.infer<typeof Input>): Promise<z.infer<typeof Output>> {
-  console.log("Search by tags!");
-  console.log("context:", ContextInstance);
   return await search(payload.query);
 }
 

@@ -1,17 +1,21 @@
 import { NativeConnection, Worker } from '@temporalio/worker';
-import * as Activities from './activities';
+import { ContextInstance } from './context';
+import { createActivities } from './activities/createActivities';
 
 async function run() {
+  // Creating new context instance
+  const context = ContextInstance;
+
   const worker = await Worker.create({
     workflowsPath: require.resolve('./workflows'),
-    activities: Activities,
+    activities: createActivities(context),
     taskQueue: process.env.TASK_QUEUE ?? 'dev-task-queue',
     connection: await NativeConnection.connect({
         address: process.env.TEMPORAL_URL ?? 'localhost:7233'
-    })
+    }),
+    debugMode: true,
   });
 
-  // Step 2: Start accepting tasks on the `hello-world` queue
   await worker.run();
 }
 

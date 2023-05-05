@@ -1,2 +1,2 @@
 export * from './AbstractSchedule';
-export * from './types';
+export * from './list';

@@ -1,6 +1,6 @@
 import { WorkflowClient } from './client';
 import { AbstractSchedule } from './schedules';
-import * as Schedules from './schedules/types';
+import Schedules from './schedules/list';
 
 async function run() {
     // Getting schedules information
