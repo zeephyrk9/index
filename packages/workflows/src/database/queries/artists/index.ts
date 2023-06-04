@@ -1,2 +1,2 @@
-export * from './CreateNewArtist';
-export * from './GetArtistByProperties';
+export * from './MergeQueries';
+export * from './CreateArtist';

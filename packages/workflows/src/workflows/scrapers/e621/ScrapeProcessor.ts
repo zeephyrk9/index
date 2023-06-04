@@ -2,14 +2,19 @@ import { z } from "zod";
 import { PostEntry } from "./types";
 import { ProxiedActivities } from "../../../activities/proxiedActivities";
 import getUnifiedPostId from "../../../helpers/getUnifiedPostId";
-import { ContentType } from "../../../database";
+import { ContentEntry, ContentType, TagType, VendorType } from "../../../database";
 import AbstractWorkflowMeta from "../../../helpers/AbstractWorkflowMeta";
 import { nanoid } from "nanoid";
 
-const { getAPIRequestContents, getPostById, createPost } = ProxiedActivities;
+const {
+    getAPIRequestContents,
+    getPostById,
+    createPost,
+    createTagForPost,
+    createArtistForPost,
+} = ProxiedActivities;
 
 const Input = z.object({
-    page: z.number().default(0),
     limit: z.number().default(10),
 });
 
@@ -22,8 +27,11 @@ const Output = z.object({
 
 // Workflow implementation
 export async function e621ScrapeProcessor(payload: z.infer<typeof Input>): Promise<z.infer<typeof Output>> {
+    // Getting latest post from database
+    
+
     // Getting posts from e621
-    const { posts } = await getAPIRequestContents<{ posts: Array<PostEntry> }>({
+    const { posts: rawPosts } = await getAPIRequestContents<{ posts: Array<PostEntry> }>({
         // @todo
         // add page number
         url: `https://e621.net/posts.json?limit=${ payload.limit }&tags=status:any`,
@@ -33,33 +41,52 @@ export async function e621ScrapeProcessor(payload: z.infer<typeof Input>): Promi
     const postsAddedIds: Array<string> = [];
 
     // Checking if we need to update/create these posts
-    for (const post of posts) {
-        const postExists = await getPostById(getUnifiedPostId("E621", post.id));
+    for (const rawPost of rawPosts) {
+        const postExists = await getPostById(VendorType.E621, String(rawPost.id));
         
         if (postExists) {
             // @todo
             // update this post information? or relationships
+            console.log("do not create post");
         } else {
-            // @todo
-            // adding tags
-            // adding sources
-            // parsing relationships
-            // ...and other information
-
-            // Parsing this post's artists
-            
-
             // Creating this post
-            await createPost({
+            const post: ContentEntry = {
                 type: ContentType.IMAGE,
-                id: getUnifiedPostId("E621", post.id),
-                imageUrl: post.file.url,
+                id: getUnifiedPostId(VendorType.E621, rawPost.id),
+                imageUrl: rawPost.file.url,
+                vendor: VendorType.E621,
 
                 created_at: Date.now(), // @todo: parse post's created_at field and pass it here
                 scraped_at: Date.now(),
-            });
+            };
+
+            await createPost(post);
+
+            // Attaching tags to this post
+            for (const [type, tags] of Object.entries({
+                [TagType.GENERAL]: [...rawPost.tags.general, ...rawPost.tags.character, ...rawPost.tags.copyright],
+                [TagType.SPECIES]: rawPost.tags.species,
+                [TagType.META]: rawPost.tags.meta,
+                artists: rawPost.tags.artist,
+            })) {
+                // Handling author group separately
+                if (type == "artists") {
+                    for (const artist of tags) {
+                        await createArtistForPost(post.id, {
+                            name: artist,
+                        });
+                    };
+                } else {
+                    for (const tag of tags) {
+                        await createTagForPost(post.id, {
+                            name: tag,
+                            type: type as TagType,
+                        });
+                    };
+                }
+            };
             
-            postsAddedIds.push(getUnifiedPostId("E621", post.id));
+            postsAddedIds.push(post.id);
         };
     };
 

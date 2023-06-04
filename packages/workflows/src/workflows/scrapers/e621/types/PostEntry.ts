@@ -6,5 +6,16 @@ export interface PostEntry {
 
     file: {
         url: string,
+    },
+
+    tags: {
+        general: string[],
+        species: string[],
+        character: string[],
+        copyright: [],
+        artist: string[],
+        invalid: string[],
+        lore: string[],
+        meta: string[],
     }
 };
