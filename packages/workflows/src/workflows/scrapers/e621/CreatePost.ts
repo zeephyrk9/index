@@ -1,8 +1,7 @@
 import { z } from "zod";
 import { ProxiedActivities } from "@workflows/activities/proxiedActivities";
 import getUnifiedPostId from "@workflows/helpers/getUnifiedPostId";
-import { ContentType, TagType, VendorType } from "@workflows/database";
-
+import { ContentEntry, ContentType, ImageContentEntry, TagType, VendorType } from "@workflows/database";
 
 // Activities
 const {
@@ -24,7 +23,7 @@ const Input = z.object({
 });
 
 // Workflow
-export async function e621CreatePost(payload: z.infer<typeof Input>) {
+export async function e621CreatePost(payload: z.infer<typeof Input>): Promise<ImageContentEntry> {
     // Checking if this post exists or no
     const postId = getUnifiedPostId(VendorType.E621, payload.id);
     const existingPost = await getPostById(VendorType.E621, postId);
@@ -32,9 +31,10 @@ export async function e621CreatePost(payload: z.infer<typeof Input>) {
     if (existingPost != null) {
         // @todo
         // update this post
+        return existingPost
     } else {
         // Creating this post
-        await createPost({
+        const post: ContentEntry = {
             id: postId,
             type: ContentType.IMAGE,
             imageUrl: payload.file.url,
@@ -43,7 +43,9 @@ export async function e621CreatePost(payload: z.infer<typeof Input>) {
             // @todo parse this
             created_at: Date.now(),
             scraped_at: Date.now(),
-        });
+        }
+
+        await createPost(post);
 
         // Creating this post tags
         for await (const tag of payload.tags) {
@@ -52,5 +54,7 @@ export async function e621CreatePost(payload: z.infer<typeof Input>) {
                 type: TagType.GENERAL,
             });
         };
+
+        return post;
     };
 };

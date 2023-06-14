@@ -16,11 +16,18 @@
         "main": "packages/workflows/src/worker.ts",
         "additionalEntryPoints": ["packages/workflows/src/schedule.ts"],
         "tsConfig": "packages/workflows/tsconfig.app.json",
-        "assets": [{
-          "glob": "packages/workflows/tsconfig*.json",
-          "input": ".",
-          "output": "."
-        }],
+        "assets": [
+          {
+            "glob": "packages/workflows/tsconfig*.json",
+            "input": ".",
+            "output": "."
+          },
+          {
+            "glob": "/tsconfig.base.json",
+            "input": ".",
+            "output": "."
+          }
+        ],
         "esbuildOptions": {
           "sourcemap": true,
           "outExtension": {

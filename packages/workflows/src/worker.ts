@@ -14,8 +14,9 @@ async function run() {
       webpackConfigHook(config) {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
-        config.plugins = [new TsconfigPathsPlugin({
-          configFile: resolve(__dirname, "..", "tsconfig.json")
+        config.resolve.plugins = [new TsconfigPathsPlugin({
+          configFile: resolve(__dirname, "..", "tsconfig.json"),
+          baseUrl: '.'
         })];
         
         return config;
