@@ -1,8 +1,7 @@
 import { nanoid } from "nanoid";
 import { z } from "zod";
-import { ProxiedActivities } from "../../activities/proxiedActivities";
-import { ContextInstance } from "../../context";
-import AbstractWorkflowMeta from "../../helpers/AbstractWorkflowMeta";
+import { ProxiedActivities } from "@workflows/activities/proxiedActivities";
+import AbstractWorkflowMeta from "@workflows/helpers/AbstractWorkflowMeta";
 
 // Activities
 const { search } = ProxiedActivities;

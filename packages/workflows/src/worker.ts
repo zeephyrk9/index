@@ -1,6 +1,8 @@
 import { NativeConnection, Worker } from '@temporalio/worker';
 import { ContextInstance } from './context';
 import { createActivities } from './activities/createActivities';
+import { TsconfigPathsPlugin } from 'tsconfig-paths-webpack-plugin'
+import { resolve } from "path";
 
 async function run() {
   // Creating new context instance
@@ -8,6 +10,17 @@ async function run() {
 
   const worker = await Worker.create({
     workflowsPath: require.resolve('./workflows'),
+    bundlerOptions: {
+      webpackConfigHook(config) {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        config.plugins = [new TsconfigPathsPlugin({
+          configFile: resolve(__dirname, "..", "tsconfig.json")
+        })];
+        
+        return config;
+      }
+    },
     activities: createActivities(context),
     taskQueue: process.env.TASK_QUEUE ?? 'dev-task-queue',
     connection: await NativeConnection.connect({

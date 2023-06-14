@@ -1,9 +1,9 @@
 import { z } from "zod";
 import { PostEntry } from "./types";
-import { ProxiedActivities } from "../../../activities/proxiedActivities";
-import getUnifiedPostId from "../../../helpers/getUnifiedPostId";
-import { ContentEntry, ContentType, TagType, VendorType } from "../../../database";
-import AbstractWorkflowMeta from "../../../helpers/AbstractWorkflowMeta";
+import { ProxiedActivities } from "@workflows/activities/proxiedActivities";
+import getUnifiedPostId from "@workflows/helpers/getUnifiedPostId";
+import { ContentEntry, ContentType, TagType, VendorType } from "@workflows/database";
+import AbstractWorkflowMeta from "@workflows/helpers/AbstractWorkflowMeta";
 import { nanoid } from "nanoid";
 
 const {
