@@ -4,8 +4,7 @@ import { AxiosRequestConfig } from "axios";
 import { createTagForPost, createPost, createTag, getPostById, getTagByName, search } from "./posts";
 import { ArtistEntry, ContentEntry, TagEntry, VendorType } from "@workflows/database";
 import { createArtistForPost } from "./artists";
-import { downloadLargeFile, unzipFile } from "./other";
-import { e621ProcessCsvFile, readCsvFile } from "./reconciler";
+import { e621DownloadAndProcessCsvFile } from "./reconciler";
 
 export function createActivities(context: Context) {
     return {
@@ -46,22 +45,8 @@ export function createActivities(context: Context) {
             return createArtistForPost(context, postId, artist);
         },
         
-        // > Other
-        downloadLargeFile(url: string, saveToFile: string) {
-            return downloadLargeFile({ url, saveToFile });
-        },
-
-        unzipFile(sourcePath: string, destinationPath) {
-            return unzipFile({ sourcePath, destinationPath });
-        },
-
-        // > Reconciler
-        readCsvFile(path: string) {
-            return readCsvFile({ inputFile: path });
-        },
-
-        e621ProcessCsvFile(path: string) {
-            return e621ProcessCsvFile({ inputFile: path });
+        e621DownloadAndProcessCsvFile(url: string) {
+            return e621DownloadAndProcessCsvFile(url);
         },
     };
 };

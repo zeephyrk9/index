@@ -1,7 +1,6 @@
 import { NativeConnection, Worker } from '@temporalio/worker';
 import { ContextInstance } from './context';
 import { createActivities } from './activities/createActivities';
-import { TsconfigPathsPlugin } from 'tsconfig-paths-webpack-plugin'
 import { resolve } from "path";
 
 async function run() {
@@ -12,13 +11,11 @@ async function run() {
     workflowsPath: require.resolve('./workflows'),
     bundlerOptions: {
       webpackConfigHook(config) {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        config.resolve.plugins = [new TsconfigPathsPlugin({
-          configFile: resolve(__dirname, "..", "tsconfig.json"),
-          baseUrl: '.'
-        })];
-        
+        config.resolve.alias = {
+          ...config.resolve?.alias,
+          "@workflows": resolve(__dirname),
+        };
+
         return config;
       }
     },

@@ -3,7 +3,7 @@ import { PostEntry } from "./types";
 import { ProxiedActivities } from "@workflows/activities/proxiedActivities";
 import AbstractWorkflowMeta from "@workflows/helpers/AbstractWorkflowMeta";
 import { ChildWorkflowHandle, startChild } from "@temporalio/workflow";
-import { e621CreatePost } from "./CreatePost";
+import { e621CreatePost } from "../utility";
 import { nanoid } from "nanoid";
 
 const {
@@ -37,7 +37,7 @@ export async function e621ScrapeProcessor(payload: z.infer<typeof Input>): Promi
 
     for await (const rawPost of rawPosts) {
         handles.push(await startChild(e621CreatePost, {
-            workflowId: (`e621Scraper-createPost-${ rawPost.id }`),
+            workflowId: (`createPost-e621-${ rawPost.id }`),
             args: [
                 {
                     id: rawPost.id,

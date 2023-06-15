@@ -1,5 +1,5 @@
 import { AbstractSchedule } from "@workflows/schedules";
-import { e621ScrapeProcessor } from "@workflows/workflows/scrapers";
+import { e621ScrapeProcessor } from "@workflows/workflows/sources";
 
 export const Scrapers: Array<AbstractSchedule> = [
     {
