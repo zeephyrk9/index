@@ -24,7 +24,9 @@ async function run() {
     connection: await NativeConnection.connect({
         address: process.env.TEMPORAL_URL ?? 'localhost:7233'
     }),
-    debugMode: true,
+    // experimental
+    reuseV8Context: true,
+    showStackTraceSources: true,
   });
 
   await worker.run();
