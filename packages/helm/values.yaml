@@ -4,7 +4,7 @@ temporal_url: temporal.temporal-tests.svc.cluster.local:7233
 # Worker deployment
 worker:
   image: git.odzi.dog/zeephyr/worker
-  replicas: 2
+  replicas: 6
 
 # Gateway deployment
 gateway:
