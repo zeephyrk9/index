@@ -4,9 +4,8 @@ import CsvReadableStream from "csv-reader";
 import { promisify } from "util";
 import { createUnzip } from "zlib";
 import { createReadStream, createWriteStream } from "fs";
-import { finished, pipeline } from "stream";
+import { pipeline } from "stream";
 
-const streamFinished = promisify(finished);
 const pipelineAsync = promisify(pipeline);
 
 function transformHashToUrl(hash: string, ext: string): string {
@@ -45,42 +44,44 @@ function transformRow(row: Record<string, string | number>): PostEntry | null {
 };
 
 export async function e621DownloadAndProcessCsvFile(url: string) {
-    // Downloading csv file
-    const fileWriter = createWriteStream("./reconciler-data.zip");
+    // Downloading and unzipping csv file
+    const fileWriterStream = createWriteStream("./reconciler-data.csv");
+    const unzipStream = createUnzip();
 
-    await axios.get(url, { responseType: 'stream' }).then((response) => {
-        response.data.pipe(fileWriter);
-        return streamFinished(fileWriter);
-    });
-    
-    // Unzipping this file
-    const unzip = createUnzip();
-    const archiveReader = createReadStream("./reconciler-data.zip");
-    const csvFileWriter = createWriteStream("./reconciler-data.csv", "utf-8");
-
-    await pipelineAsync(
-        archiveReader,
-        unzip,
-        async function* (sourceReader) {
-
-            // lmfao
-            // I'll rot in hell for this, won't I?
-            for await (const chunk of sourceReader) {
-                const stringified = Buffer.from(chunk).toString()
-                if (stringified.includes("id,uploader_id,created_at")) {
-                    const removeFromData = stringified.slice(0, stringified.indexOf("id,uploader_id"));
-                    yield Buffer.from(stringified.replace(removeFromData, ""), "utf-8");
-                    continue;
-                };
-                
-                yield chunk;
+    // Currently I don't have enough mental power to figure out how to
+    // properly strip file headers from gzipped stream, so I'm just leave this
+    // as it is
+    const funnyStream = async function* (sourceReader) {
+        // lmfao
+        // I'll rot in hell for this, won't I?
+        for await (const chunk of sourceReader) {
+            const stringified = Buffer.from(chunk).toString()
+            if (stringified.includes("id,uploader_id,created_at")) {
+                const removeFromData = stringified.slice(0, stringified.indexOf("id,uploader_id"));
+                yield Buffer.from(stringified.replace(removeFromData, ""), "utf-8");
+                continue;
             };
-        },
-        csvFileWriter
-    );
+            
+            yield chunk;
+        };
+    };
 
+    // Downloading and unzipping this file
+    await axios.get(url, { responseType: 'stream' })
+        .then((response) => {
+            return pipelineAsync(
+                response.data,
+                unzipStream,
+                // Slices file header from this stream
+                funnyStream,
+                fileWriterStream
+            )
+        });
+
+    // Reading csv file, transforming it's contents and returning
     const readFile = promisify<Array<PostEntry>>((callback) => {
         const entries: Array<PostEntry> = [];
+        // let index = 0;
 
         const csvFileReader = createReadStream("./reconciler-data.csv", "utf-8");
 
@@ -90,9 +91,15 @@ export async function e621DownloadAndProcessCsvFile(url: string) {
             .on('data', (row: Record<string, string | number>) => {
                 const transformedRow = transformRow(row);
                 if (transformedRow) entries.push(transformedRow);
+
+                // @todo
+                // updating e621ReconcilerEntry-<index> in redis storage
+
+                // index++;
             })
             .on('end', () => {
                 callback(null, entries);
+                // callback(null, { length: index });
             });
     });
 

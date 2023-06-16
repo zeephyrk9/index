@@ -20,9 +20,9 @@ const Output = z.object({});
 
 export async function e621Reconciler(payload: z.infer<typeof Input>) {
     // Reading CSV file
-    const entries = await e621DownloadAndProcessCsvFile(payload.url);
 
-    console.log("entries:", entries);
+    // @todo rewrite to use redis as temporary storage
+    const entries = await e621DownloadAndProcessCsvFile(payload.url);
 
     // Starting reconciler loop
     await executeChild<typeof e621ReconcilerLoop>(e621ReconcilerLoop, {
@@ -34,6 +34,8 @@ export async function e621Reconciler(payload: z.infer<typeof Input>) {
 export async function e621ReconcilerLoop(posts: Array<PostEntry>, startFrom: number) {
     let entriesProcessed = 0;
     
+    // @todo rewrite to use redis as temporary storage
+
     // Looping through all posts
     for (let index = startFrom; index < posts.length; index++) {
         const rawPost = posts[index];
