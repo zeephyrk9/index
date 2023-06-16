@@ -26,7 +26,7 @@ const Input = z.object({
 export async function e621CreatePost(payload: z.infer<typeof Input>): Promise<ImageContentEntry> {
     // Checking if this post exists or no
     const postId = getUnifiedPostId(VendorType.E621, payload.id);
-    const existingPost = await getPostById(VendorType.E621, postId);
+    const existingPost = await getPostById(VendorType.E621, String(payload.id));
 
     if (existingPost != null) {
         // @todo
