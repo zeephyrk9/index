@@ -25,10 +25,10 @@ workflows:
 
 # Database configuration
 database:
-  url: neo4j+s://zeephyr-index
-  user: neo4j
-  password: "12344321"
-  databaseName: neo4j
+  url: "neo4j://zeephyr-index"
+  user: "neo4j"
+  password: "u77oD2@&bXwc&XkZrKs@SW5Ks%E"
+  databaseName: "neo4j"
 
 #
 # Neo4j deployment
@@ -39,7 +39,7 @@ neo4j:
       cpu: 500m
       memory: 2Gi
 
-    password: "12344321"
+    password: "u77oD2@&bXwc&XkZrKs@SW5Ks%E"
 
   volumes:
     data:

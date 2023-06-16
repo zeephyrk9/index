@@ -28,11 +28,11 @@ spec:
             value: {{ $.Values.taskQueueName }}
           - name: NAMESPACE
             value: {{ $.Values.workflows.namespace }}
-          - name: NEO4j_URL
+          - name: NEO4J_URI
             value: {{ $.Values.database.url }}
-          - name: NEO4j_USER
+          - name: NEO4J_USERNAME
             value: {{ $.Values.database.user }}
-          - name: NEO4j_PASSWORD
+          - name: NEO4J_PASSWORD
             value: {{ $.Values.database.password }}
-          - name: NEO4j_DATABASE
+          - name: NEO4J_DATABASE
             value: {{ $.Values.database.databaseName }}
