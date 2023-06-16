@@ -23,6 +23,14 @@ workflows:
   # change to zeephyr
   namespace: default
 
+# Database configuration
+database:
+  url: neo4j+s://zeephyr-index
+  user: neo4j
+  password: "12344321"
+  databaseName: neo4j
+
+#
 # Neo4j deployment
 neo4j:
   neo4j:
