@@ -41,7 +41,8 @@
         },
         "schedule": {
           "main": "packages/workflows/src/schedule.ts",
-          "outputPath": "dist/packages/schedule"
+          "outputPath": "dist/packages/schedule",
+          "bundle": true
         }
       }
     },
@@ -55,8 +56,8 @@
         "worker": {
           "buildTarget": "workflows:build"
         },
-        "schedules": {
-          "buildTarget": "workflows:build:schedules"
+        "schedule": {
+          "buildTarget": "workflows:build:schedule"
         }
       }
     },
