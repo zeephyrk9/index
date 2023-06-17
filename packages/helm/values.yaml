@@ -6,6 +6,15 @@ worker:
   image: git.odzi.dog/zeephyr/worker
   replicas: 6
 
+  neo4j:
+    url: "neo4j://zeephyr-index"
+    user: "neo4j"
+    password: "u77oD2@&bXwc&XkZrKs@SW5Ks%E"
+    databaseName: "neo4j"
+
+  redis:
+    url: "zeephyr-index-redis-master:6379"
+
 # Gateway deployment
 gateway:
   image: git.odzi.dog/zeephyr/gateway
@@ -22,13 +31,6 @@ workflows:
   # todo
   # change to zeephyr
   namespace: default
-
-# Database configuration
-database:
-  url: "neo4j://zeephyr-index"
-  user: "neo4j"
-  password: "u77oD2@&bXwc&XkZrKs@SW5Ks%E"
-  databaseName: "neo4j"
 
 #
 # Neo4j deployment
@@ -47,3 +49,10 @@ neo4j:
       defaultStorageClass:
         requests:
           storage: 2Gi
+
+# 
+# Redis deployment
+redis:
+  architecture: standalone
+  auth:
+    enabled: false

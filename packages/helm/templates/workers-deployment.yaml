@@ -29,10 +29,14 @@ spec:
           - name: NAMESPACE
             value: {{ $.Values.workflows.namespace }}
           - name: NEO4J_URI
-            value: {{ $.Values.database.url }}
+            value: {{ $.Values.worker.neo4j.url }}
           - name: NEO4J_USERNAME
-            value: {{ $.Values.database.user }}
+            value: {{ $.Values.worker.neo4j.user }}
           - name: NEO4J_PASSWORD
-            value: {{ $.Values.database.password }}
+            value: {{ $.Values.worker.neo4j.password }}
           - name: NEO4J_DATABASE
-            value: {{ $.Values.database.databaseName }}
+            value: {{ $.Values.worker.neo4j.databaseName }}
+          - name: REDIS_URL
+            value: {{ $.Values.worker.redis.url }}
+
+          # @todo add redis password?

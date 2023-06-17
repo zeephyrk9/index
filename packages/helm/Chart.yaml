@@ -10,3 +10,6 @@ dependencies:
 - name: neo4j
   version: "5.5.0"
   repository: "https://helm.neo4j.com/neo4j"
+- name: redis
+  version: "17.11.5"
+  repository: "https://charts.bitnami.com/bitnami"

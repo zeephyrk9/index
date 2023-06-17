@@ -2,5 +2,8 @@ dependencies:
 - name: neo4j
   repository: https://helm.neo4j.com/neo4j
   version: 5.5.0
-digest: sha256:7d64bce3d703fa9072eef95d7e8e7be53c3e4f679ef88f1ca498c38beeca4866
-generated: "2023-03-28T11:56:28.750158024+03:00"
+- name: redis
+  repository: https://charts.bitnami.com/bitnami
+  version: 17.11.5
+digest: sha256:87c19f5efb95f44c6e958a6b844434bea40d9e709ddcd7b334a33bdd6094c324
+generated: "2023-06-17T13:22:51.072733972+03:00"
