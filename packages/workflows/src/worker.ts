@@ -6,7 +6,8 @@ import { resolve } from "path";
 async function run() {
   // Creating new context instance
   const context = ContextInstance;
-
+  await context.initialize();
+  
   const worker = await Worker.create({
     workflowsPath: require.resolve('./workflows'),
     bundlerOptions: {

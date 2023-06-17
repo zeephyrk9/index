@@ -5,6 +5,7 @@ import { createTagForPost, createPost, createTag, getPostById, getTagByName, sea
 import { ArtistEntry, ContentEntry, TagEntry, VendorType } from "@workflows/database";
 import { createArtistForPost } from "./artists";
 import { e621DownloadAndProcessCsvFile } from "./reconciler";
+import { getFromRedis } from "./redis";
 
 export function createActivities(context: Context) {
     return {
@@ -45,8 +46,14 @@ export function createActivities(context: Context) {
             return createArtistForPost(context, postId, artist);
         },
         
+        // Reconciler
         e621DownloadAndProcessCsvFile(url: string) {
-            return e621DownloadAndProcessCsvFile(url);
+            return e621DownloadAndProcessCsvFile(context, url);
+        },
+
+        // Redis
+        getFromRedis<T>(key: string, parseAsJson) {
+            return getFromRedis(context, key, parseAsJson) as Promise<T>;
         },
     };
 };

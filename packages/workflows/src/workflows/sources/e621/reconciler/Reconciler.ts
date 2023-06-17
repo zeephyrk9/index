@@ -2,44 +2,52 @@ import AbstractWorkflowMeta from "@workflows/helpers/AbstractWorkflowMeta";
 import { ProxiedActivities } from "@workflows/activities/proxiedActivities";
 import { z } from "zod";
 import { nanoid } from "nanoid";
-import { PostEntry } from "../scrapper/types";
-import { ParentClosePolicy, continueAsNew, executeChild, startChild } from "@temporalio/workflow";
+import { ParentClosePolicy, continueAsNew, startChild } from "@temporalio/workflow";
 import { e621CreatePost } from "../utility";
+import { ReconcilerPostEntry } from "@workflows/types";
 
 const MAX_ITERATIONS = 100;
 
 const {
-    e621DownloadAndProcessCsvFile
+    e621DownloadAndProcessCsvFile,
+    getFromRedis,
 } = ProxiedActivities;
 
 const Input = z.object({
     url: z.string()
 })
 
-const Output = z.object({});
+const Output = z.object({
+    length: z.number()
+});
 
 export async function e621Reconciler(payload: z.infer<typeof Input>) {
     // Reading CSV file
 
     // @todo rewrite to use redis as temporary storage
-    const entries = await e621DownloadAndProcessCsvFile(payload.url);
+    const meta = await e621DownloadAndProcessCsvFile(payload.url);
 
     // Starting reconciler loop
-    await executeChild<typeof e621ReconcilerLoop>(e621ReconcilerLoop, {
+    await startChild<typeof e621ReconcilerLoop>(e621ReconcilerLoop, {
         workflowId: (`e621-reconciler-loop`),
-        args: [ entries, 0 ]
+        parentClosePolicy: ParentClosePolicy.PARENT_CLOSE_POLICY_ABANDON,
+        args: [ 0, meta.length ]
     });
+
+    return meta;
 };
 
-export async function e621ReconcilerLoop(posts: Array<PostEntry>, startFrom: number) {
+export async function e621ReconcilerLoop(startFrom: number, length: number) {
     let entriesProcessed = 0;
     
-    // @todo rewrite to use redis as temporary storage
-
     // Looping through all posts
-    for (let index = startFrom; index < posts.length; index++) {
-        const rawPost = posts[index];
+    for (let index = startFrom; index < length; index++) {
+        const rawPost = await getFromRedis<ReconcilerPostEntry>(`e621ReconcilerEntry:${index}`, true);
 
+        // @todo
+        // notify someone about this
+        if (rawPost == null) continue;
+        
         // Starting child workflow to process this post
         // independently
         await startChild<typeof e621CreatePost>(e621CreatePost, {
@@ -51,16 +59,9 @@ export async function e621ReconcilerLoop(posts: Array<PostEntry>, startFrom: num
                     created_at: rawPost.created_at,
                     updated_at: rawPost.updated_at,
                     file: {
-                        url: rawPost.file.url,
+                        url: rawPost.imageUrl,
                     },
-                    tags: [
-                        ...rawPost.tags.general,
-                        ...rawPost.tags.species,
-                        ...rawPost.tags.character,
-                        ...rawPost.tags.artist,
-                        ...rawPost.tags.lore,
-                        ...rawPost.tags.meta,
-                    ]
+                    tags: rawPost.tags,
                 }
             ]
         });
@@ -70,7 +71,7 @@ export async function e621ReconcilerLoop(posts: Array<PostEntry>, startFrom: num
 
         if (entriesProcessed >= MAX_ITERATIONS) {
             // Continue as new
-            return await continueAsNew<typeof e621ReconcilerLoop>(posts, index + 1);
+            return await continueAsNew<typeof e621ReconcilerLoop>(index + 1, length);
         }
     };
 };
