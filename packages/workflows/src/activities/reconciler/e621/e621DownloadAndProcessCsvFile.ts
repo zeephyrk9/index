@@ -5,6 +5,7 @@ import { createUnzip } from "zlib";
 import { pipeline, Transform } from "stream";
 import { Context } from "@workflows/context";
 import { ReconcilerPostEntry } from "@workflows/types";
+import { Context as ActivityContext } from "@temporalio/activity";
 
 const pipelineAsync = promisify(pipeline);
 
@@ -67,6 +68,10 @@ export async function e621DownloadAndProcessCsvFile(context: Context, url: strin
                     csvReaderStream
                         .on('data', (data: Record<string, string | number>) => {
                             const transformedRow = transformRow(data);
+                            
+                            // Hearbeating our activity to let temporal know that
+                            // we are still working and receiving data
+                            ActivityContext.current().heartbeat(index);
 
                             if (transformedRow) {
                                 index++;
