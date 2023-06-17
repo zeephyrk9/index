@@ -13,7 +13,7 @@ worker:
     databaseName: "neo4j"
 
   redis:
-    url: "zeephyr-index-redis-master:6379"
+    url: "redis://zeephyr-index-redis-master:6379"
 
 # Gateway deployment
 gateway:
