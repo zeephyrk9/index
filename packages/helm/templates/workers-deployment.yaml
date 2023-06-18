@@ -23,7 +23,7 @@ spec:
         image: {{ $.Values.worker.image }}:{{ $.Values.tag }}
         env:
           - name: TEMPORAL_URL
-            value: {{ $.Values.temporal_url }}
+            value: {{ $.Values.temporalUrl }}
           - name: TASK_QUEUE
             value: {{ $.Values.taskQueueName }}
           - name: NAMESPACE

@@ -23,7 +23,7 @@ spec:
           - name: HOST
             value: "0.0.0.0"
           - name: TEMPORAL_URL
-            value: {{ $.Values.temporal_url }}
+            value: {{ $.Values.temporalUrl }}
           - name: PATH_PREFIX
             value: "/zeephyr/index/v1"
           - name: TASK_QUEUE

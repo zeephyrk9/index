@@ -1,5 +1,5 @@
 tag: latest
-temporal_url: temporal.temporal-tests.svc.cluster.local:7233
+temporalUrl: temporal.temporal.svc.cluster.local:7233
 
 # Worker deployment
 worker:
