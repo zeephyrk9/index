@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { PostEntry } from "./types";
-import { ProxiedActivities } from "@workflows/activities/proxiedActivities";
+import { ProxiedActivities, getCustomProxiedActivities } from "@workflows/activities/proxiedActivities";
 import AbstractWorkflowMeta from "@workflows/helpers/AbstractWorkflowMeta";
 import { ChildWorkflowHandle, ParentClosePolicy, startChild } from "@temporalio/workflow";
 import { e621CreatePost } from "../utility";
@@ -8,7 +8,11 @@ import { nanoid } from "nanoid";
 
 const {
     getAPIRequestContents,
-} = ProxiedActivities;
+} = getCustomProxiedActivities({
+    retry: {
+        initialInterval: '2 seconds',
+    }
+});
 
 const Input = z.object({
     limit: z.number().default(10),

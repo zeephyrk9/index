@@ -4,7 +4,7 @@ temporalUrl: temporal.temporal.svc.cluster.local:7233
 # Worker deployment
 worker:
   image: git.odzi.dog/zeephyr/worker
-  replicas: 6
+  replicas: 2
 
   neo4j:
     url: "neo4j://zeephyr-index"
