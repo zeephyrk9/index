@@ -11,9 +11,8 @@ const Input = z.object({
   query: z.string()
 });
 
-const Output = z.string();
+const Output = z.any();
 
-/** A workflow that simply calls an activity */
 export async function searchByTags(payload: z.infer<typeof Input>): Promise<z.infer<typeof Output>> {
   return await search(payload.query);
 }

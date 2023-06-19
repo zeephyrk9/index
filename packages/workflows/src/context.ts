@@ -1,15 +1,16 @@
 import { DatabaseInstance } from "./neo4j";
 import { RedisInstance } from "./redis";
+import { WebhooksContainer } from "./webhooks";
 
 export class Context {
     public database = DatabaseInstance;
-
     public redis = RedisInstance;
+    public webhooks = new WebhooksContainer(this);
 
     public async initialize() {
         // Initializing redis client
         await this.redis.connect();
-
+        await this.webhooks.initialize();
     };
 
     public getDatabaseSession() {
