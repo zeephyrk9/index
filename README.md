@@ -4,14 +4,13 @@ Scraping, parsing, storing and distributing furry content over the web with alwa
 
 ## TODOs
 
-- [ ] Rewrite e621's Reconciler to store post information in redis instead of plain-old JavaScript objects
-- [ ] Add more reconcilers and scrappers
-    - [ ] FurAffinity reconciler* and scraper
-    - [ ] SoFurry reconciler* and scraper
-    - [ ] 
+- [x] Rewrite e621's Reconciler to store post information in redis instead of plain-old JavaScript objects
+- [ ] Add more ~~reconcilers~~ and scrappers
+    - [ ] FurAffinity ~~reconciler*~~ and scraper
+    - [ ] SoFurry ~~reconciler*~~ and scraper
 
     _*_ This reconciler will be much harder to do, considering that this website doesn't provide some magical thingie like e621's database export archive.
-- [ ] Investigate the possibility of adding these reconcilers and scrapers:
+- [ ] Investigate the possibility of adding these ~~reconcilers~~ and scrapers:
     - [ ] DeviantArt
     - [ ] ArchiveOfOurOwn
     - [ ] FurryNetwork
@@ -19,3 +18,7 @@ Scraping, parsing, storing and distributing furry content over the web with alwa
     - [ ] Twitter?
     - [ ] Weasyl
     - [ ] InkBunny
+
+## Updates
+
+19.06.2023 - After some investigation I've decided to remove reconciler ideas for now and focus only on scraping and distributing scraped content via events using webhooks to interested parties.
