@@ -18,6 +18,7 @@ Scraping, parsing, storing and distributing furry content over the web with alwa
     - [ ] Twitter?
     - [ ] Weasyl
     - [ ] InkBunny
+- [ ] Add automatic drone pipeline to deploy landing app to Vercel
 
 ## Updates
 
