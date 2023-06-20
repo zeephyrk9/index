@@ -5,20 +5,17 @@ import { WorkflowsLinks } from '../../config';
 ---
 
 <Layout>
-    <section class="w-full h-screen flex pt-6">
+    <section class="flex pt-6 mt-24">
         <!-- Left card (small introduction) -->
         <div class="relative w-2/3 rounded-2xl border-black border-2 mx-0.5 flex flex-col">
             <!-- @todo showcase webhooks ability here in background -->
-            <div class="absolute ">
-
-            </div>
 
             <!-- Text -->
-            <h1 class="ml-[auto] flex-grow text-right w-2/3 text-8xl font-thin text-black p-8">Get new content right away</h1>
+            <h1 class="ml-[auto] text-right w-2/3 text-7xl font-thin text-black p-8">Get new content right away</h1>
 
             <!-- Bottom panel -->
             <div class="p-2">
-                <p class="text-black w-2/3 ml-[auto] text-right text-xl p-8">
+                <p class="text-black w-2/3 ml-[auto] text-right text-md p-8">
                     <span class="text-black font-bold">zeephyr webhooks</span> takes on the task of finding new content and distributing it to those who need it - i.e. you. Currently we are monitoring <span class="rounded-full bg-purple-400 px-4 py-0.5 text-white font-medium">2 content sources (e621, e921)</span>, collecting the newest posts and giving information about them to our users.
                     
                     <br /><br />
@@ -34,9 +31,9 @@ import { WorkflowsLinks } from '../../config';
         </div>
 
         <!-- Right card (stats cards) -->
-        <div class="w-1/3 rounded-2xl border-black border-2 mx-0.5 p-2 grid grid-rows-4 grid-cols-1 gap-2">
+        <div class="w-1/3 rounded-2xl border-black border-2 mx-0.5 p-2 grid grid-rows-3 grid-cols-1 gap-2">
             <!-- Workflows count -->
-            <div class="w-full h-full rounded-2xl bg-purple-400 bg-opacity-30 p-4">
+            <div class="rounded-2xl bg-purple-400 bg-opacity-30 p-4">
                 <!-- Header -->
                 <div class="w-full flex items-center justify-between">
                     <h1 class="text-black text-xl">Workflows processed in the past <span class="underline">7 days</span></h1>
@@ -55,7 +52,7 @@ import { WorkflowsLinks } from '../../config';
             </div> -->
 
             <!-- Active Scrapers information -->
-            <div class="w-full h-full rounded-2xl bg-lime-400 bg-opacity-30 p-4">
+            <div class="rounded-2xl bg-lime-400 bg-opacity-30 p-4">
                 <!-- header -->
                 <div class="flex justify-between">
                     <h1 class="text-black text-xl">Currently active scrapers</h1>
@@ -70,7 +67,7 @@ import { WorkflowsLinks } from '../../config';
                         { link: WorkflowsLinks["e621Scraper"], title: "e621" }, 
                         { link: "https://t.me/juiipup", title: "Want more?" }
                     ].map((entry) => (
-                        <a href={ entry.link } class="block rounded-full text-white bg-black px-4 py-1.5 transition hover:bg-white hover:text-black">
+                        <a href={ entry.link } class="block rounded-full text-white bg-black px-4 py-1 transition border-2 border-transparent hover:bg-transparent hover:text-black hover:border-black">
                             { entry.title }
                         </a>
                     ))}
@@ -80,13 +77,8 @@ import { WorkflowsLinks } from '../../config';
             <!-- WIP -->
             <div class="rounded-2xl bg-violet-400 bg-opacity-30 p-4">
                 <h1 class="text-xl">It's a little bit lonely here, isn't it?</h1>
-                <p class="mt-4 text-md">Well duh, it's because this site is <span class="line-through">a piece of crap made in 30 minutes</span> still in development. In very... slow development, yes. <a href="https://github.com/zeephyrk9" class="bg-zinc-900 rounded-full text-white px-4 py-0.5 font-medium transition hover:bg-zinc-700">Here is our GitHub</a>, by the way</p>
+                <p class="mt-4 text-sm">Well duh, it's because this site is <span class="line-through">a piece of crap made in 30 minutes</span> still in development. In very... slow development, yes. <a href="https://github.com/zeephyrk9" class="bg-zinc-900 rounded-full text-white px-4 font-medium transition border-2 border-transparent hover:border-black hover:bg-transparent hover:text-black">Here is our GitHub</a>, by the way</p>
             </div>
-
-            <!-- More stats button -->
-            <!-- <button class="rounded-2xl text-center text-black hover:bg-black hover:text-white transition">
-                <h1 class="text-4xl font-thin">More stats...</h1>
-            </button> -->
         </div>
     </section>
 </Layout>

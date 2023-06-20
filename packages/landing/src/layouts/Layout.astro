@@ -19,30 +19,32 @@ const { title = "zeephyr red - different services for different communities" } =
 		<title>{ title }</title>
 	</head>
 	<body>
-		<main class="fixed top-0 inset-x-0 rounded-2xl w-full h-full flex flex-col px-4 pb-4">
+		<main class="rounded-2xl w-full h-full flex flex-col px-4">
             <!-- Header -->
-            <header class="w-full p-4 bg-gradient-to-tr from-red-400 via-pink-400 to-purple-400 rounded-b-[2rem] rounded-t-md">
-                <div class="w-full bg-gray-100 rounded-full flex items-center justify-between px-6 py-4">
-                    <!-- Logotype -->
-                    <p class="text-xl font-bold text-black">zeephyr</p>
+            <header class="z-50 fixed top-0 inset-x-0 px-4">
+                <div class="w-full p-4 bg-gradient-to-tr from-red-400 via-pink-400 to-purple-400 rounded-b-[2rem] rounded-t-md">
+                    <div class="w-full bg-gray-100 rounded-full flex items-center justify-between px-6 py-2">
+                        <!-- Logotype -->
+                        <p class="text-base font-bold text-black">zeephyr</p>
 
-                    <div class="flex items-stretch">
-                        <!-- Links -->
-                        { HeaderLinks.map((entry) => {
-                            if (entry.isInDevelopment) {
-                                return (
-                                    <div class={ `flex cursor-not-allowed items-center gap-2 relative rounded-full mx-2 px-6 py-2 border-2 border-black ${ urlPath.startsWith(entry.link) ? "bg-black text-white" : "" }` }>
-                                        <p>{ entry.title }</p>
+                        <div class="flex items-stretch">
+                            <!-- Links -->
+                            { HeaderLinks.map((entry) => {
+                                if (entry.isInDevelopment) {
+                                    return (
+                                        <div class={ `flex cursor-not-allowed items-center gap-2 relative rounded-full mx-2 px-4 py-1 border-2 border-black ${ urlPath.startsWith(entry.link) ? "bg-black text-white" : "" }` }>
+                                            <p>{ entry.title }</p>
 
-                                        <span class="rounded-full text-xs bg-red-500 px-2 text-white">
-                                            Soon
-                                        </span>
-                                    </div>
-                                )
-                            } else {
-                                return <a href={ entry.link } class={ `rounded-full mx-2 px-6 py-2 border-2 border-black ${ urlPath.startsWith(entry.link) ? "bg-black text-white" : "" }` }>{ entry.title }</a>
-                            }
-                        }) }
+                                            <span class="rounded-full text-xs bg-red-500 px-2 text-white">
+                                                Soon
+                                            </span>
+                                        </div>
+                                    )
+                                } else {
+                                    return <a href={ entry.link } class={ `rounded-full mx-2 px-4 py-1 border-2 border-black ${ urlPath.startsWith(entry.link) ? "bg-black text-white" : "" }` }>{ entry.title }</a>
+                                }
+                            }) }
+                        </div>
                     </div>
                 </div>
             </header>
