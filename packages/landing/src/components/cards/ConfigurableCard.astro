@@ -1,0 +1,37 @@
+---
+import { Card, CardSize } from '../../config';
+export type Props = Card;
+
+function getCardSizeClass(size: CardSize) {
+    switch (size) {
+        case CardSize.LONG:
+            return 'col-span-2';
+        case CardSize.LARGE:
+            return 'row-span-2 col-span-2';
+    }
+}
+
+const { 
+    title,
+    description,
+    size = CardSize.SMALL,
+    dividerColor = "bg-gray-100 bg-opacity-50",
+    backgroundColor = "bg-indigo-400",
+    textColor = "text-white"
+} = Astro.props;
+---
+
+<div class={ `w-full h-full flex-grow rounded-2xl bg-red-400 p-6 ${ getCardSizeClass(size) } ${ backgroundColor } ${ textColor }` }>
+    <!-- Text -->
+    <h1 class="text-3xl">
+        <Fragment set:html={ title } />
+    </h1>
+
+    <!-- Divider -->
+    <div class={ `w-full h-[2px] ${ dividerColor } my-4` }></div>
+
+    <!-- Description -->
+    <p>
+        <Fragment set:html={ description } />
+    </p>
+</div>
