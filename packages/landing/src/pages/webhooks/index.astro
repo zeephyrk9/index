@@ -5,24 +5,26 @@ import { WorkflowsLinks } from '../../config';
 ---
 
 <Layout>
-    <section class="flex flex-col md:flex-row pt-6 mt-16 md:mt-20">
+    <section class="min-h-screen flex flex-col md:flex-row pt-6 pt-20 md:pt-24 pb-6">
         <!-- Left card (small introduction) -->
         <div class="relative w-full md:w-2/3 rounded-2xl border-black border-2 my-0.5 md:mx-0.5 flex flex-col">
             <!-- @todo showcase webhooks ability here in background -->
 
             <!-- Text -->
-            <h1 class="ml-[auto] text-right w-full md:w-2/3 text-4xl md:text-7xl font-thin text-black p-8">Get new content right away</h1>
-
-            <!-- Bottom panel -->
-            <div class="p-2">
-                <p class="text-black w-full md:w-2/3 ml-[auto] text-right text-sm md:text-md p-8">
-                    <span class="text-black font-bold">zeephyr webhooks</span> takes on the task of finding new content and distributing it to those who need it - i.e. you. Currently we are monitoring <span class="rounded-full bg-purple-400 px-4 py-0.5 text-white font-medium">2 content sources (e621, e921)</span>, collecting the newest posts and giving information about them to our users.
+            <div class="ml-[auto] w-full md:w-2/3 text-right p-8">
+                <h1 class="text-4xl md:text-7xl font-thin text-black">Get new content right away</h1>
+                
+                <p class="text-black text-sm md:text-md mt-4">
+                    <span class="text-black font-bold">zeephyr webhooks</span> takes on the task of finding new content and distributing it to those who need it - i.e. you. Currently we are monitoring <span class="whitespace-nowrap rounded-full bg-purple-400 px-4 py-0.5 text-white font-medium">2 content sources (e621, e921)</span>, collecting the newest posts and giving information about them to our users.
                     
                     <br /><br />
                     
                     <span class="text-black text-opacity-50">Somebody might need it, right?</span>
                 </p>
-                
+            </div>
+
+            <!-- Bottom panel -->
+            <div class="flex-grow p-2 flex flex-col-reverse">
                 <!-- Bottom button -->
                 <a href="/webhooks/docs" class="block w-full bg-black rounded-2xl text-center py-3 md:py-6 transition text-white hover:bg-white hover:text-black border-4 border-transparent hover:border-black">
                     <p class="text-md md:text-2xl font-medium">Open documentation</p>
