@@ -9,7 +9,10 @@ export class Context {
 
     public async initialize() {
         // Initializing redis client
-        await this.redis.connect();
+        await this.redis.connect().catch((error) => {
+            console.log("Unable to connect to redis storage:");
+            throw error;
+        });
         await this.webhooks.initialize();
     };
 

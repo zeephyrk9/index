@@ -1,7 +1,5 @@
-import { nanoid } from "nanoid";
 import { z } from "zod";
 import { ProxiedActivities } from "@workflows/activities/proxiedActivities";
-import AbstractWorkflowMeta from "@workflows/helpers/AbstractWorkflowMeta";
 
 // Activities
 const { search } = ProxiedActivities;
@@ -14,15 +12,7 @@ const Input = z.object({
 const Output = z.any();
 
 export async function searchByTags(payload: z.infer<typeof Input>): Promise<z.infer<typeof Output>> {
+  Input.parse(payload);
+  
   return await search(payload.query);
 }
-
-export const SearchByTagsWorkflowMeta: AbstractWorkflowMeta = {
-  path: "/posts/search",
-  handler: searchByTags,
-
-  generateWorkflowId: () => (`searchByTags-${ nanoid() }`),
-
-  input: Input,
-  output: Output,
-};

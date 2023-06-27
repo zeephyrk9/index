@@ -1,10 +1,8 @@
 import { z } from "zod";
 import { PostEntry } from "./types";
-import { ProxiedActivities, getCustomProxiedActivities } from "@workflows/activities/proxiedActivities";
-import AbstractWorkflowMeta from "@workflows/helpers/AbstractWorkflowMeta";
-import { ChildWorkflowHandle, ParentClosePolicy, startChild } from "@temporalio/workflow";
+import { getCustomProxiedActivities } from "@workflows/activities/proxiedActivities";
+import { ParentClosePolicy, startChild } from "@temporalio/workflow";
 import { e621CreatePost } from "../utility";
-import { nanoid } from "nanoid";
 
 const {
     getAPIRequestContents,
@@ -24,8 +22,10 @@ const Output = z.object({
 
 // Workflow implementation
 export async function e621ScrapeProcessor(payload: z.infer<typeof Input>): Promise<z.infer<typeof Output>> {
+    Input.parse(payload);
+    
     // @todo
-    // Getting latest post from database    
+    // Getting latest post from database
 
     // Getting posts from e621
     const { posts: rawPosts } = await getAPIRequestContents<{ posts: Array<PostEntry> }>({
@@ -71,14 +71,4 @@ export async function e621ScrapeProcessor(payload: z.infer<typeof Input>): Promi
         success: true,
         // posts
     };
-};
-
-export const e621ScraperProcessorMeta: AbstractWorkflowMeta = {
-    path: "/scrapers/e621",
-    handler: e621ScrapeProcessor,
-  
-    generateWorkflowId: () => (`e621Scraper-${ nanoid() }`),
-  
-    input: Input,
-    output: Output,
 };

@@ -1,7 +1,5 @@
-import AbstractWorkflowMeta from "@workflows/helpers/AbstractWorkflowMeta";
 import { ProxiedActivities } from "@workflows/activities/proxiedActivities";
 import { z } from "zod";
-import { nanoid } from "nanoid";
 import { ParentClosePolicy, continueAsNew, startChild } from "@temporalio/workflow";
 import { e621CreatePost } from "../utility";
 import { ReconcilerPostEntry } from "@workflows/types";
@@ -17,14 +15,11 @@ const Input = z.object({
     url: z.string()
 })
 
-const Output = z.object({
-    length: z.number()
-});
-
 export async function e621Reconciler(payload: z.infer<typeof Input>) {
-    // Reading CSV file
+    // Checking our input
+    Input.parse(payload);
 
-    // @todo rewrite to use redis as temporary storage
+    // Reading CSV file
     const meta = await e621DownloadAndProcessCsvFile(payload.url);
 
     // Starting reconciler loop
@@ -74,14 +69,4 @@ export async function e621ReconcilerLoop(startFrom: number, length: number) {
             return await continueAsNew<typeof e621ReconcilerLoop>(index + 1, length);
         }
     };
-};
-
-export const e621ReconcilerMeta: AbstractWorkflowMeta = {
-    path: "/reconcilers/e621",
-    handler: e621Reconciler,
-
-    generateWorkflowId: () => (`e621-reconciler-${ nanoid() }`),
-
-    input: Input,
-    output: Output
 };

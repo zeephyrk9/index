@@ -1,22 +1,13 @@
-import { Client, Connection, ClientOptions } from "@temporalio/client";
+import { Connection, WorkflowClientOptions, WorkflowClient } from "@temporalio/client";
 
-class WorkflowClientClass {
-    private connection: Connection | undefined;
+export async function getClient(clientOptions?: WorkflowClientOptions) {
+    const connection = await Connection.connect({
+        address: process.env.TEMPORAL_URL ?? 'localhost:7233'
+    });
 
-    public async getClient(clientOptions?: Omit<ClientOptions, "connection">) {
-        // Checking if our connection is open
-        if (this.connection == undefined) {
-            this.connection = await Connection.connect({
-                address: process.env.TEMPORAL_URL ?? 'localhost:7233'
-            });
-        };
-
-        return new Client({
-            ...clientOptions,
-            connection: this.connection,
-            namespace: process.env.NAMESPACE ?? "default"
-        });
-    };
+    return new WorkflowClient({
+        ...clientOptions,
+        connection: connection,
+        namespace: process.env.NAMESPACE ?? "default"
+    });
 };
-
-export const WorkflowClient = new WorkflowClientClass();
